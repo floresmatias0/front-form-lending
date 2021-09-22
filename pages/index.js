@@ -2,6 +2,7 @@ import { Form, Formik, Field } from 'formik'
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
+import axios from 'axios'
 
 export default function Home() {
   return (
@@ -13,35 +14,87 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
+        <h1>¿Necesitas efectivo?</h1>
+        <h2>Dejanos tus datos asi nos comunicamos para otorgarte tu credito</h2>
+
         <Formik
           initialValues={{
             nombre: "",
             apellido: "",
+            once: "11",
+            telefono: "",
             monto: "",
-            telefono: ""
+            cuotas: ""
           }}
-          validate={() => {
+          validate={(fields) => {
             let errors = {}
+            if(!fields.nombre){
+              errors.nombre = "por favor completa con un nombre"
+            }else if(!/^[a-zA-ZÀ-ÿ\s]{1,40}$/.test(fields.nombre)){
+              errors.nombre = 'El nombre solo puede contener letras y espacios'
+            }
+            if(!fields.apellido){
+              errors.apellido = "por favor completa con un apellido"
+            }else if(!/^[a-zA-ZÀ-ÿ\s]{1,40}$/.test(fields.apellido)){
+              errors.apellido = 'El apellido solo puede contener letras y espacios'
+            }
+            if(!fields.telefono){
+              errors.telefono = "sin un telefono no podremos comunicarnos contigo"
+            }else if(!/^([0-9]){1,8}$/.test(fields.telefono)){
+              errors.telefono = "deben ser solo numeros y maximo 8 numeros"
+            }
+            if(!fields.monto){
+              errors.monto = "elige un monto"
+            }
+            if(!fields.cuotas){
+              errors.cuotas = "¿sabias que podes devolverlo en cuotas?"
+            }
             return errors
           }}
           onSubmit={(fields) => {
-            console.log(fields)
+            let options = {
+              "method": "POST",
+              "url" : "http://localhost:3001/users/create",
+              "header" : {
+                ContentType: 'application/json' 
+              },
+              "data": {
+                monto: fields.monto,
+                nombre: fields.nombre,
+                apellido: fields.apellido,
+                telefono: fields.once.concat(fields.telefono),
+                cuotas: fields.cuotas
+              }
+            }
+            axios.request(options)
+            .then(result => console.log(result))
           }}
         >
           {({errors,touched,values}) => (
             <Form className={styles.form}>
+
+              <p className={styles.monto}>${values && values.monto ? values.monto : 0}</p>
+              <Field type="range" step="1000" min="10000" max="50000" name="monto" placeholder="$10.000"/>
+              {touched.monto && errors.monto && <p className={styles.error}>{errors.monto}</p>}
+
               <label>Nombre:</label>
-              <Field name="nombre"/>
+              <Field name="nombre" placeholder="Jonh"/>
+              {touched.nombre && errors.nombre && <p className={styles.error}>{errors.nombre}</p>}
 
               <label>Apellido:</label>
-              <Field name="apellido"/>
+              <Field name="apellido" placeholder="Doeh"/>
+              {touched.apellido && errors.apellido && <p className={styles.error}>{errors.apellido}</p>}
 
-              <label>Telefono:</label>
-              <Field name="telefono"/>
+              <label className={styles.cuotas}>Telefono:</label>
+              <div className={styles.telephone}>
+                <input placeholder="11" id="once" name="once" disabled/>
+                <Field name="telefono" id="number" placeholder="69045897"/>
+              </div>
+              {touched.telefono && errors.telefono && <p className={styles.error}>{errors.telefono}</p>}
 
-              <label>Monto:</label>
-              {values.monto}
-              <Field type="range" min="10000" max="500000" name="monto"/>
+              <label className={styles.cuotas}>¿En cuantas cuotas?</label>
+              <Field type="number" min="1" max="12" name="cuotas" placeholder="3 cuotas"/>
+              {touched.cuotas && errors.cuotas && <p className={styles.error}>{errors.cuotas}</p>}
 
               <button type="submit">Solicitar</button>
             </Form>
@@ -49,7 +102,7 @@ export default function Home() {
         </Formik>
       </main>
 
-      <footer className={styles.footer}>
+      {/* <footer className={styles.footer}>
         <a
           href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
           target="_blank"
@@ -60,7 +113,7 @@ export default function Home() {
             <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
           </span>
         </a>
-      </footer>
+      </footer> */}
     </div>
   )
 }
