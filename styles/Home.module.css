@@ -146,7 +146,35 @@
   border: none;
   border-radius: .2em;
   margin-top: 1em;
-  padding: .3em 0;
+  padding: .3em;
+  cursor: pointer;
+}
+.form button:hover{
+  opacity: 0.7;
+}
+.form button:active{
+  transform: scale(0.95);
+}
+.button,.between{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  width: 95%;
+  justify-content: space-around;
+  margin: 0 !important;
+}
+.between label {
+  width: 90px;
+  text-align: center;
+}
+.button button {
+  width: 60px;
+  padding: .5em .2em;
+  font-size: 12px;
+}
+.active{
+  background: #aa0404 !important;
+  outline: none !important;
 }
 .telephone{
   display: flex;

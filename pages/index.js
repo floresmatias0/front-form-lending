@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Form, Formik, Field } from 'formik'
 import Head from 'next/head'
 import Image from 'next/image'
@@ -5,6 +6,13 @@ import styles from '../styles/Home.module.css'
 import axios from 'axios'
 
 export default function Home() {
+  const [cuotas, setCuotas] = useState(null)
+
+  const handleCuotas = (e,num) => {
+    e.preventDefault()
+    setCuotas(num)
+  }
+
   return (
     <div className={styles.container}>
       <Head>
@@ -46,7 +54,7 @@ export default function Home() {
             if(!fields.monto){
               errors.monto = "elige un monto"
             }
-            if(!fields.cuotas){
+            if(!cuotas){
               errors.cuotas = "¿sabias que podes devolverlo en cuotas?"
             }
             return errors
@@ -63,7 +71,7 @@ export default function Home() {
                 nombre: fields.nombre,
                 apellido: fields.apellido,
                 telefono: fields.once.concat(fields.telefono),
-                cuotas: fields.cuotas
+                cuotas: cuotas
               }
             }
             axios.request(options)
@@ -74,7 +82,11 @@ export default function Home() {
             <Form className={styles.form}>
 
               <p className={styles.monto}>${values && values.monto ? values.monto : 0}</p>
-              <Field type="range" step="1000" min="10000" max="50000" name="monto" placeholder="$10.000"/>
+              <div className={styles.between}>
+                <label>$10.000</label>
+                <Field type="range" step="1000" min="10000" max="50000" name="monto" placeholder="$10.000"/>
+                <label>$50.000</label> 
+              </div>
               {touched.monto && errors.monto && <p className={styles.error}>{errors.monto}</p>}
 
               <label>Nombre:</label>
@@ -93,7 +105,12 @@ export default function Home() {
               {touched.telefono && errors.telefono && <p className={styles.error}>{errors.telefono}</p>}
 
               <label className={styles.cuotas}>¿En cuantas cuotas?</label>
-              <Field type="number" min="1" max="12" name="cuotas" placeholder="3 cuotas"/>
+              <div className={styles.button}>
+                <button className={cuotas === 1 ? styles.active : ""} onClick={(e) => handleCuotas(e,1)}>1 cuota</button>
+                <button className={cuotas === 3 ? styles.active : ""} onClick={(e) => handleCuotas(e,3)}>3 cuotas</button>
+                <button className={cuotas === 6 ? styles.active : ""} onClick={(e) => handleCuotas(e,6)}>6 cuotas</button>
+                <button className={cuotas === 12 ? styles.active : ""} onClick={(e) => handleCuotas(e,12)}>12 cuotas</button>
+              </div>
               {touched.cuotas && errors.cuotas && <p className={styles.error}>{errors.cuotas}</p>}
 
               <button type="submit">Solicitar</button>
