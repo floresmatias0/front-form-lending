@@ -21,38 +21,48 @@
   src: url('../assets/fonts/OpenSans-SemiBoldItalic.ttf');
 }
 .container {
-  min-height: 100vh;
-  padding: 0 0.5rem;
   display: flex;
+  width: 100%;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  backdrop-filter: blur(3px);
+}
+.header{
+  width: 100%;
 }
 .main {
-  padding: 5rem 0;
-  flex: 1;
+  width: 100%;
+  margin-top: 55px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   color: #FFFFFF;
-  
-  backdrop-filter: blur(2px) !important;
+
 }
 .main h1, .main h2 {
-  text-shadow: 0px 0px 2px #000000;
-  margin: .5em 0;
+  color: #FFFFFF;
+  margin: 0;
   text-align: center;
+  background-color: #191f21d7 ;
+  padding: 0 .5em;
+  padding-bottom: .2em;
+  border-bottom-right-radius: 1em;
+  border-top-left-radius: 1em;
+}
+.main h2{
+  margin: .5em 0;
 }
 .form{
   display: flex;
-  width: 60%;
+  width: 45%;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #000000b7;
-  border-radius: .5em;
+  background-color: #191f21d7;
+  border-bottom-right-radius: 2em;
+  border-top-left-radius: 2em;
   padding: 1em;
   font-family: Open-sans-bold;
 }
@@ -68,7 +78,7 @@
 }
 .error{
   margin: 0;
-  color: red;
+  color: #aa0404;
   font-family: Open-sans-medium;
   font-size: 14px;
   width: 240px;
@@ -76,7 +86,7 @@
 }
 .form input{
   width: 250px;
-  height: 40px;
+  height: 30px;
   padding: 0 .5em;
   border: none;
   outline: none;
@@ -103,7 +113,7 @@
   background: none !important;
 }
 .monto{
-  background: #04AA6D !important; 
+  background: #325642  !important; 
   color: #FFFFFF;
   padding: .5em 1em;
   border-radius: 2em;
@@ -116,7 +126,7 @@
   width: 25px !important;
   height: 25px !important; 
   border-radius: 50% !important;
-  background: #04AA6D !important; 
+  background: #325642 !important; 
   border: 5px solid #F0F0F0 !important;
   cursor: pointer !important;
 }
@@ -124,7 +134,7 @@
   width: 25px !important;
   height: 25px !important;
   margin-top: -.6em !important;
-  background: #04AA6D !important;
+  background: #325642  !important;
   border: 5px solid #d6d6d6 !important;
   border-radius: 50% !important;
   cursor: pointer !important;
@@ -139,8 +149,8 @@
 }
 .form button {
   width: 120px;
-  background: #04aa4f;
-  color: #FFFFFF;
+  background: #EFE4DC ;
+  color: #000000;
   font-family: Open-sans-bold;
   font-size: 16px;
   border: none;
@@ -148,9 +158,10 @@
   margin-top: 1em;
   padding: .3em;
   cursor: pointer;
+  opacity: 0.9;
 }
 .form button:hover{
-  opacity: 0.7;
+  opacity: 1;
 }
 .form button:active{
   transform: scale(0.95);
@@ -168,13 +179,15 @@
   text-align: center;
 }
 .button button {
-  width: 60px;
+  width: 80px;
   padding: .5em .2em;
   font-size: 12px;
 }
 .active{
-  background: #aa0404 !important;
+  background: #325642  !important;
   outline: none !important;
+  opacity: 1 !important;
+  color: #FFFFFF !important;
 }
 .telephone{
   display: flex;
@@ -187,7 +200,7 @@
 }
 
 .telephone input:first-child::placeholder{
-  color: #FFFFFF;
+  color: #000000;
   text-align: center;
 }
 
@@ -199,11 +212,23 @@
 .telephone input:last-child::placeholder{
   text-align: center;
 }
-
+.cuentaTotal{
+  width: 200px;
+  background: #325642 ;
+  color: #FFFFFF;
+  font-family: Open-sans-bold;
+  font-size: 12px;
+  text-align: center;
+  border: none;
+  border-radius: .2em;
+  margin: 1.5em 0;
+  padding: .3em;
+}
 .footer {
   width: 100%;
-  height: 100px;
-  border-top: 1px solid #eaeaea;
+  height: 90px;
+  min-height: 80px;
+  max-height: 80px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -213,23 +238,29 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-grow: 1;
-}
-
-.logo {
-  height: 1em;
-  margin-left: 0.5rem;
 }
 
 @media (max-width: 600px) {
+  .container,.main{
+    padding: 0 !important;
+  }
   .form{
-    width: 100%;
+    width: 90%;
+    padding: 1em;
+  }
+  .main h2, .main h1 {
+    width: 90%;
   }
   .form input{
-    width: 80%;
+    width: 90%;
     height: 40px;
     border: none;
     outline: none;
     border-radius: .2em;
+  }
+  .button button {
+    width: 60px;
+    padding: .5em .2em;
+    font-size: 12px;
   }
 }
