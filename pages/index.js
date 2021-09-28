@@ -1,9 +1,12 @@
-import { useState } from 'react'
-import { Form, Formik, Field } from 'formik'
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
-import axios from 'axios'
-import Swal from 'sweetalert2'
+import { useState } from 'react';
+
+import Head from 'next/head';
+import Image from 'next/image'
+
+import FormLoan from '../components/formloan/Formloan'
+import styles from '../styles/Home.module.css';
+import Instructions from '../components/instructions/Instructions';
+import wave from '../assets/images/waves.svg'
 
 
 export default function Home() {
@@ -14,36 +17,24 @@ export default function Home() {
     setCuotas(num)
   }
 
-  const Toast = Swal.mixin({
-    toast: true,
-    position: 'top-end',
-    showConfirmButton: false,
-    timer: 3000,
-    timerProgressBar: true,
-    didOpen: (toast) => {
-      toast.addEventListener('mouseenter', Swal.stopTimer)
-      toast.addEventListener('mouseleave', Swal.resumeTimer)
-    }
-  })
-
   const prestamoEnCuotas = (num,divisor) => {
     let aux
     let total = 0
     switch(divisor){
       case 1:
-        aux = (10 * num)/100 + num 
-        total = Math.round(aux/divisor)
-      break;
-      case 3: 
-        aux = (20 * num)/100 + num 
-        total = Math.round(aux/divisor)
-      break;
-      case 6:
         aux = (30 * num)/100 + num 
         total = Math.round(aux/divisor)
       break;
-      case 12:
+      case 3: 
         aux = (40 * num)/100 + num 
+        total = Math.round(aux/divisor)
+      break;
+      case 6:
+        aux = (50 * num)/100 + num 
+        total = Math.round(aux/divisor)
+      break;
+      case 12:
+        aux = (60 * num)/100 + num 
         total = Math.round(aux/divisor)
       break;
       default:
@@ -60,120 +51,22 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <h1>¿Necesitas efectivo?</h1>
-        <h2>Dejanos tus datos asi nos comunicamos para otorgarte tu credito</h2>
-
-        <Formik
-          initialValues={{
-            nombre: "",
-            apellido: "",
-            once: "11",
-            telefono: "",
-            monto: "",
-            cuotas: ""
-          }}
-          validate={(fields) => {
-            let errors = {}
-            if(!fields.nombre){
-              errors.nombre = "por favor completa con un nombre"
-            }else if(!/^[a-zA-ZÀ-ÿ\s]{1,40}$/.test(fields.nombre)){
-              errors.nombre = 'El nombre solo puede contener letras y espacios'
-            }
-            if(!fields.apellido){
-              errors.apellido = "por favor completa con un apellido"
-            }else if(!/^[a-zA-ZÀ-ÿ\s]{1,40}$/.test(fields.apellido)){
-              errors.apellido = 'El apellido solo puede contener letras y espacios'
-            }
-            if(!fields.telefono){
-              errors.telefono = "sin un telefono no podremos comunicarnos contigo"
-            }else if(!/^([0-9]){1,8}$/.test(fields.telefono)){
-              errors.telefono = "deben ser solo numeros y maximo 8 numeros"
-            }
-            if(!fields.monto){
-              errors.monto = "elige un monto"
-            }
-            if(!cuotas){
-              errors.cuotas = "¿sabias que podes devolverlo en cuotas?"
-            }
-            return errors
-          }}
-          onSubmit={(fields) => {
-            let options = {
-              "method": "POST",
-              "url" : "http://localhost:3001/users/create",
-              "header" : {
-                ContentType: 'application/json' 
-              },
-              "data": {
-                monto: fields.monto,
-                nombre: fields.nombre,
-                apellido: fields.apellido,
-                telefono: fields.once.concat(fields.telefono),
-                cuotas: cuotas
-              }
-            }
-            axios.request(options)
-            .then(() => {
-              Toast.fire({
-                icon: 'success',
-                title: 'datos enviados',
-                text: 'nos pondremos en contacto en breve'
-              })
-            })
-          }}
-        >
-          {({errors,touched,values}) => (
-            <Form className={styles.form}>
-
-              <p className={styles.monto}>${values && values.monto ? values.monto : 0}</p>
-              <div className={styles.between}>
-                <label>$10.000</label>
-                <Field type="range" step="1000" min="10000" max="50000" name="monto" placeholder="$10.000"/>
-                <label>$50.000</label> 
-              </div>
-              {touched.monto && errors.monto && <p className={styles.error}>{errors.monto}</p>}
-
-              <label>Nombre:</label>
-              <Field name="nombre" placeholder="Jonh"/>
-              {touched.nombre && errors.nombre && <p className={styles.error}>{errors.nombre}</p>}
-
-              <label>Apellido:</label>
-              <Field name="apellido" placeholder="Doeh"/>
-              {touched.apellido && errors.apellido && <p className={styles.error}>{errors.apellido}</p>}
-
-              <label className={styles.cuotas}>Telefono:</label>
-              <div className={styles.telephone}>
-                <input placeholder="11" id="once" name="once" disabled/>
-                <Field name="telefono" id="number" placeholder="69045897"/>
-              </div>
-              {touched.telefono && errors.telefono && <p className={styles.error}>{errors.telefono}</p>}
-
-              <label className={styles.cuotas}>¿En cuantas cuotas?</label>
-              <div className={styles.button}>
-                <button className={cuotas === 1 ? styles.active : ""} onClick={(e) => handleCuotas(e,1)}>1 cuota</button>
-                <button className={cuotas === 3 ? styles.active : ""} onClick={(e) => handleCuotas(e,3)}>3 cuotas</button>
-                <button className={cuotas === 6 ? styles.active : ""} onClick={(e) => handleCuotas(e,6)}>6 cuotas</button>
-                <button className={cuotas === 12 ? styles.active : ""} onClick={(e) => handleCuotas(e,12)}>12 cuotas</button>
-              </div>
-              {touched.cuotas && errors.cuotas && <p className={styles.error}>{errors.cuotas}</p>}
-              <span className={styles.cuentaTotal}>me devolverias {cuotas} cuotas de ${values && values.monto && cuotas ? prestamoEnCuotas(values.monto,cuotas) : 0}</span>
-              <button type="submit">Solicitar</button>
-            </Form>
-          )}
-        </Formik>
+        <div className={styles.containerMain}>
+          <div className={styles.containerForm}>
+            <h1>¿Necesitas efectivo?</h1>
+            <h3>Dejanos tus datos asi nos comunicamos para otorgarte tu credito</h3>
+          </div>
+          <div className={styles.containerForm}>
+            <FormLoan cuotas={cuotas} handleCuotas={handleCuotas} prestamoEnCuotas={prestamoEnCuotas}/>
+          </div>
+        </div>
+        <div className={styles.containerWaves}>
+          <Image src={wave} alt="waves" className={styles.waves}/>
+        </div>
       </main>
-
+      <Instructions/>
       <footer className={styles.footer}>
-        {/* <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-        </a> */}
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam tincidunt enim eu magna mollis viverra ac sit amet neque. Sed laoreet aliquet congue. Morbi rhoncus, erat a dapibus fringilla, metus nulla dapibus velit, at ullamcorper lorem lectus ac risus. Nam laoreet elementum dolor, sed imperdiet massa. Etiam eget metus facilisis, rhoncus libero id, placerat lectus. Praesent pellentesque fringilla lorem, in interdum sapien ornare vestibulum. Donec quis mattis est. Integer id lacus eu purus sodales consectetur. Phasellus interdum ultricies ipsum. In non quam sapien. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
       </footer>
     </div>
   )

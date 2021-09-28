@@ -1,17 +1,89 @@
 .navbar{
-    position: fixed;
-    top: 0;
     width: 100%;
     display: flex;
     flex-direction: row;  
-    height: 50px;
-    min-height: 50px;
-    max-height: 50px;
-    background: #3256428f  ;
-    overflow: auto;
-    z-index: 1;
-    box-shadow: 1px 1px 3px #000000de;
+    height: 90px;
+    min-height: 90px;
+    max-height: 90px;
+    background: #FFFFFF ;
+    box-shadow: 1px 1px 10px #000000de;
 }
-.navbar img{
-    padding: 1em !important;
+.lista{
+    width: 100%;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-self: center;
+    margin: 0;
 }
+.lista li{
+    align-self: center;
+    cursor: pointer;
+}
+.hidden{
+    display: none;
+}
+.pages {
+    color: #BBBBBB;
+    font-family: Open-sans-bold;
+    background: 
+      linear-gradient(to right, rgb(255, 255, 255), rgb(255, 255, 255)),
+      linear-gradient(to right, #50ac89);
+    background-size: 100% 0.2em, 0 0.2em;
+    background-position: 100% 100%, 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 600ms;
+    align-self: center;
+  } 
+.pages:hover,
+.pages:focus {
+color: #000000;
+background-size: 0 0.2em, 100% 0.2em;
+}
+
+.logo{
+    padding: 0 .05em !important;
+}
+.menuHidden{
+    display: none;
+}
+@media (max-width: 800px) {
+    .newNav{
+        position: relative;
+        display: flex;
+        flex-direction: column;  
+        width: 100% !important;
+        transition: ease 1s all;
+    }
+    .lista{
+        display: none;
+    }
+    .hidden{
+        width: 100%;
+        padding: 0;
+        list-style: none;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-self: center;
+        margin: 1em;
+        padding: 0 1em;
+    }
+    .hidden img{
+        cursor: pointer;
+    }
+    .menu{
+        text-align: justify;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .menu li {
+        width: 280px;
+        font-size: 20px;
+        margin: .5em auto;
+        text-align: center;
+    }
+  }
